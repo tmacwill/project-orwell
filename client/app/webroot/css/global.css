@@ -1,0 +1,154 @@
+html, body {
+    background: url('../img/handmadepaper.png');
+    height: 100%;
+}
+
+#nav-container {
+    background: #649CC7;
+    height: 60px; 
+    box-shadow: 0 0 3px 3px #333;
+}
+
+#nav {
+    border: 1px dashed #2D6C9C;
+    border-right: none;
+    border-left: none;
+    position: absolute;
+    top: 4px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+}
+
+#nav a {
+    font-family: 'Sorts Mill Goudy', serif;
+    color: #fefefe;
+    text-shadow: #222 1px 1px 0;
+    cursor: pointer;
+    position: absolute;
+    text-decoration: none;
+}
+
+#nav-logo {
+    font-size: 28px;
+    top: 17px;
+    left: 10px
+}
+
+#nav-login {
+    font-size: 20px;
+    top: 20px;
+    right: 10px;
+}
+
+#main-header {
+    text-align: center;
+    font-family: 'Sorts Mill Goudy', serif;
+    font-size: 36px;
+    margin-top: 50px;
+    text-shadow: #fff 1px 1px 0;
+}
+
+#home-features {
+    background: white;
+    box-shadow: 0 0 6px 3px #ccc;
+    display: block;
+    height: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 900px;
+}
+
+#form-register {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#form-register input {
+    width: 400px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.btn-register {
+    font-size: 20px !important;
+    height: 45px !important;
+    margin-top: 8px;
+}
+
+#add-document-container {
+    margin-top: 20px;
+    text-align: center; 
+}
+
+#form-add-document {
+    display: none;
+}
+
+#form-add-document input[type=text] {
+    width: 400px;
+}
+
+#btn-add-document-submit {
+    vertical-align: top;
+}
+
+#document-list {
+    background: white;
+    box-shadow: 0 0 6px 3px #ccc;
+    display: block;
+    margin: 0 auto;
+    margin-top: 40px;
+    padding-bottom: 10px;
+    width: 900px;
+}
+
+#document-search {
+    display: block;
+    margin: 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+#document-search input {
+    width: 300px;
+}
+
+#document-list ul li {
+    list-style-type: none;
+    font-size: 16px;
+    margin-left: -25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    border-top: 1px solid #ccc;
+}
+
+#document-list ul li:nth-child(odd) {
+    background: #eee;
+}
+
+#document-list .document-name {
+    font-weight: bold;
+}
+
+#document-list .document-url {
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+#document-list .hover-controls {
+    display: none;
+    float: right;
+    margin-top: -4px;
+    margin-right: 5px;
+}
+
+#document-list li:hover .hover-controls {
+    display: block;
+}
