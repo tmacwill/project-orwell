@@ -13,9 +13,10 @@
                     <button class="hover-verify btn btn-primary">
                         <i class="icon-ok icon-white"></i> Verify
                     </button>
-                    <button class="hover-view btn">
+                    <a href="<?= $this->webroot ?>documents/view/<?= $document['Document']['id'] ?>" 
+                            target="_blank" class="hover-verify btn">
                         <i class="icon-share-alt"></i> View
-                    </button>
+                    </a>
                 </div>
             </li>
         <?php endforeach; ?>

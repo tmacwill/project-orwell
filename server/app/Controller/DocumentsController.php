@@ -3,6 +3,12 @@
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
+    public function beforeFilter() {
+        parent::beforeFilter();
+
+        Controller::loadModel('Host');
+    }
+
     /**
      * Add a new document
      *
@@ -70,5 +76,69 @@ class DocumentsController extends AppController {
 
         echo json_encode(array('documents' => $documents));
         exit;
+    }
+
+    /**
+     * Download a document to a client
+     *
+     * @param $id ID of document to download
+     *
+     */
+    public function download($id) {
+        // determine client from which request is coming
+        preg_match('/^([\w\/]+)\/documents\/download\/\d+$/', $_GET['client'], $matches);
+        $client = $matches[1];
+
+        // get document to download and host requesting document
+        $document = $this->Document->findById($id);
+        $host = $this->Host->findByUrl($client);
+
+        // make sure we have something to send and somewhere to send it
+        if ($host && $document) {
+            // construct document acquisition url
+            $url = "http://{$host['Host']['url']}/documents/acquire";
+
+            // send document and relevant metadata to client
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+                'file' => '@' . $document['Document']['path'],
+                'id' => $document['Document']['id'],
+                'name' => $document['Document']['name']
+            ));
+
+            curl_exec($ch);
+            curl_close($ch);
+        }
+
+        exit;
+    }
+
+    /**
+     * View a document hosted on the client
+     *
+     * @param $id ID of document to view
+     *
+     */
+    public function view($id) {
+        // get document to view
+        $document = $this->Document->findById($id);
+        $file = $document['Document']['path'];
+        $contents = file_get_contents($file);
+
+        // make sure file exists, and output to browser if so
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: ' . mime_content_type($file));
+            header('Content-Disposition: inline; filename=' . basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . strlen($contents));
+            ob_clean();
+            flush();
+            echo $contents;
+        } 
     }
 }

@@ -83,11 +83,53 @@ class DocumentsController extends AppController {
     }
 
     /**
+     * Download a document from the central server
+     *
+     * @param $id ID of document to download
+     *
+     */
+    public function download($id) {
+        // request file from central server
+        $this->request("documents/download/$id?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+
+        // redirect to document management screen
+        $this->redirect('/documents/manage');
+        exit;
+    }
+
+    /**
      * Manage documents
      *
      */
     public function manage() {
         $documents = $this->Document->find('all');
         $this->set(compact('documents'));
+    }
+
+    /**
+     * View a document hosted on the client
+     *
+     * @param $id ID of document to view
+     *
+     */
+    public function view($id) {
+        // get document to view
+        $document = $this->Document->findById($id);
+        $file = $document['Document']['path'];
+        $contents = file_get_contents($file);
+
+        // make sure file exists, and output to browser if so
+        if (file_exists($file)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: ' . mime_content_type($file));
+            header('Content-Disposition: inline; filename=' . basename($file));
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Pragma: public');
+            header('Content-Length: ' . strlen($contents));
+            ob_clean();
+            flush();
+            echo $contents;
+        }
     }
 }

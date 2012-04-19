@@ -11,7 +11,10 @@
                 <span class="document-name"><?= $document['Document']['name'] ?></span>
 
                 <div class="hover-controls">
-                    <a href="#" class="btn btn-primary">Host this document</a>
+                    <a href="<?= $this->webroot ?>documents/download/<?= $document['Document']['id'] ?>"
+                            class="btn btn-primary">
+                        <i class="icon-download icon-white"></i> Host
+                    </a>
                 </div>
             </li>
         <?php endforeach; ?>
