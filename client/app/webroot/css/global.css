@@ -23,7 +23,7 @@ html, body {
 
 #nav a {
     font-family: 'Sorts Mill Goudy', serif;
-    color: #fefefe;
+    color: #fff;
     text-shadow: #222 1px 1px 0;
     cursor: pointer;
     position: absolute;
@@ -107,15 +107,18 @@ html, body {
 }
 
 #document-search {
-    display: block;
-    margin: 0 auto;
     padding-top: 10px;
     padding-bottom: 10px;
-    text-align: center;
 }
 
 #document-search input {
     width: 300px;
+    margin-left: 15px;
+}
+
+#document-search button {
+    float: right;
+    margin-right: 10px;
 }
 
 #document-list ul li {

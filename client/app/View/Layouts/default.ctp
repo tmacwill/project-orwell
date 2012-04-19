@@ -41,13 +41,6 @@
     <div id="nav-container">
         <div id="nav">
             <a id="nav-logo" href="<?= $this->webroot ?>">Project Orwell</a>
-            <?php if (isset($_SESSION['host'])): ?>
-                <a id="nav-login" href="<?= $this->webroot ?>hosts/view/<?= $_SESSION['host']['id'] ?>">
-                    <?= $_SESSION['host']['name'] ?>
-                </a>
-            <?php else: ?>
-                <a id="nav-login">Login</a>
-            <?php endif; ?>
         </div>
     </div>
 
