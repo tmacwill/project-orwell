@@ -41,6 +41,10 @@
     <div id="nav-container">
         <div id="nav">
             <a id="nav-logo" href="<?= $this->webroot ?>">Project Orwell</a>
+            <div class="nav-links">
+                <a href="<?= $this->webroot ?>documents/manage">My Documents</a>
+                <a href="<?= $this->webroot ?>documents/browse">Browse Documents</a>
+            </div>
         </div>
     </div>
 

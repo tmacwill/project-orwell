@@ -52,14 +52,17 @@ class DocumentsController extends AppController {
                 $this->Document->save();
             }
 
+            // determine requesting client
+            preg_match('/^([\w\/]+)\/documents\/add$/', $_GET['client'], $matches);
+            $client = $matches[1];
+
             // add document to uploading host
-            /*
+            $host = $this->Host->findByUrl($client);
             $this->Document->HostDocuments->save(array(
                 'document_id' => $document['Document']['id'],
-                'host_id' => 1,
+                'host_id' => $host['Host']['id'],
                 'url' => $this->request->data['url']
             ));
-             */
 
             echo json_encode($document);
             exit;

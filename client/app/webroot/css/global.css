@@ -26,14 +26,31 @@ html, body {
     color: #fff;
     text-shadow: #222 1px 1px 0;
     cursor: pointer;
-    position: absolute;
     text-decoration: none;
 }
 
 #nav-logo {
-    font-size: 28px;
+    position: absolute !important;
+    font-size: 28px !important;
     top: 17px;
     left: 10px
+}
+
+.nav-links {
+    margin-left: 210px;
+}
+
+.nav-links a {
+    display: inline-block;
+    font-size: 16px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+    vertical-align: center;
+}
+
+.nav-links a:hover {
+    background: rgba(51, 51, 51, 0.1);
 }
 
 #nav-login {

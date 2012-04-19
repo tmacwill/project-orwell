@@ -11,7 +11,7 @@ class DocumentsController extends AppController {
         // form submitted
         if ($this->request->is('post')) {
             // send uploaded document to central server
-            $response = $this->request('documents/add', array(
+            $response = $this->request("documents/add?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", array(
                 'file' => '@' .$_FILES['file']['tmp_name'],
                 'filename' => $_FILES['file']['name'],
                 'name' => $this->request->data['name']

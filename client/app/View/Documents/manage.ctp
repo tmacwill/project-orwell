@@ -1,4 +1,4 @@
-<h1 id="main-header">My Documents</h1>
+<h1 id="main-header">Documents hosted on your Orwell</h1>
 <div id="document-list">
     <div id="document-search">
         <input type="search" class="search input-medium search-query" placeholder="Search" />
