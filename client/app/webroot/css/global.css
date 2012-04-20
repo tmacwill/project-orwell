@@ -156,6 +156,9 @@ html, body {
     font-weight: bold;
 }
 
+#document-list .document-name .badge-info {
+}
+
 #document-list .document-url {
     margin-left: 10px;
     font-size: 14px;
@@ -172,3 +175,5 @@ html, body {
 #document-list li:hover .hover-controls {
     display: block;
 }
+
+

@@ -73,7 +73,7 @@ class DocumentsController extends AppController {
      *
      */
     public function all() {
-        $this->Document->contain();
+        $this->Document->contain(array('HostDocuments'));
         $documents = $this->Document->find('all');
 
         echo json_encode(array('documents' => $documents));
