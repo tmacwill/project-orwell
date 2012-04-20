@@ -3,6 +3,12 @@
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
+    public function beforeFilter() {
+        parent::beforeFilter();
+
+        Controller::loadModel('Host');
+    }
+
     /**
      * Add a new document
      *
@@ -90,7 +96,17 @@ class DocumentsController extends AppController {
      */
     public function download($id) {
         // request file from central server
-        $this->request("documents/download/$id?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+        $response = $this->request("documents/download/$id?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+
+        // save all clients who are already hosting the file we just downloaded
+        $data = array();
+        foreach ($response['hosts'] as $host) {
+            $data[] = array(
+                'document_id' => $id,
+                'url' => $host['Host']['url']
+            );
+        }
+        $this->Host->saveAll($data);
 
         // redirect to document management screen
         $this->redirect('/documents/manage');

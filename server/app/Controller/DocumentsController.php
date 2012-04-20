@@ -61,7 +61,6 @@ class DocumentsController extends AppController {
             $this->Document->HostDocuments->save(array(
                 'document_id' => $document['Document']['id'],
                 'host_id' => $host['Host']['id'],
-                'url' => $this->request->data['url']
             ));
 
             echo json_encode($document);
@@ -98,10 +97,33 @@ class DocumentsController extends AppController {
 
         // make sure we have something to send and somewhere to send it
         if ($host && $document) {
-            // construct document acquisition url
-            $url = "http://{$host['Host']['url']}/documents/acquire";
+            // get all clients hosting this document
+            $this->Host->contain();
+            $host_ids = array_map(function ($e) { return $e['host_id']; }, $document['HostDocuments']);
+            $hosts = $this->Host->findAllById($host_ids);
+
+            // notify each host that a new client has joined the network
+            foreach ($hosts as $h) {
+                $url = "http://{$h['Host']['url']}/hosts/add";
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+                    'document_id' => $document['Document']['id'],
+                    'url' => $host['Host']['url']
+                ));
+                curl_exec($ch);
+                curl_close($ch);
+            }
+
+            // save that client is hosting document
+            $this->Document->HostDocuments->save(array(
+                'document_id' => $document['Document']['id'],
+                'host_id' => $host['Host']['id']
+            ));
 
             // send document and relevant metadata to client
+            $url = "http://{$host['Host']['url']}/documents/acquire";
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -110,9 +132,10 @@ class DocumentsController extends AppController {
                 'id' => $document['Document']['id'],
                 'name' => $document['Document']['name']
             ));
-
             curl_exec($ch);
             curl_close($ch);
+
+            echo json_encode(array('hosts' => $hosts));
         }
 
         exit;
@@ -142,6 +165,6 @@ class DocumentsController extends AppController {
             ob_clean();
             flush();
             echo $contents;
-        } 
+        }
     }
 }
