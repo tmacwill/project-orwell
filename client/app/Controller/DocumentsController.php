@@ -81,11 +81,18 @@ class DocumentsController extends AppController {
      *
      */
     public function browse() {
-        // get list of documents from the central server
-        $documents = $this->request('documents/all');
+        // get list of all documents hosted by client
+        $documents = $this->Document->find('all');
+        $document_ids = array_map(function ($e) { return $e['Document']['id']; }, $documents);
+
+        // get list of documents from the central server, filtering those already hosted by client
+        $all_documents = $this->request('documents/all');
+        $all_documents = array_filter($all_documents['documents'], function($e) use ($document_ids) {
+            return !in_array($e['Document']['id'], $document_ids);
+        });
 
         // send documents to view
-        $this->set('documents', $documents['documents']);
+        $this->set('documents', $all_documents);
     }
 
     /**
