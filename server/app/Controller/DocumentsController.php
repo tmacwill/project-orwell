@@ -5,8 +5,16 @@ App::uses('Controller', 'Controller');
 class DocumentsController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
-
         Controller::loadModel('Host');
+
+        // make sure an api key has been sent
+        if (!isset($_GET['key']) || !$_GET['key'])
+            exit;
+
+        // make sure api key is valid
+        $host = $this->Host->findByKey($_GET['key']);
+        if (!$host)
+            exit;
     }
 
     /**
@@ -53,7 +61,7 @@ class DocumentsController extends AppController {
             }
 
             // determine requesting client
-            preg_match('/^([\w\/]+)\/documents\/add$/', $_GET['client'], $matches);
+            preg_match('/^([\w\/]+)\/documents\/add/', $_GET['client'], $matches);
             $client = $matches[1];
 
             // add document to uploading host
@@ -88,7 +96,7 @@ class DocumentsController extends AppController {
      */
     public function download($id) {
         // determine client from which request is coming
-        preg_match('/^([\w\/]+)\/documents\/download\/\d+$/', $_GET['client'], $matches);
+        preg_match('/^([\w\/]+)\/documents\/download\/\d+/', $_GET['client'], $matches);
         $client = $matches[1];
 
         // get document to download and host requesting document
@@ -104,7 +112,7 @@ class DocumentsController extends AppController {
 
             // notify each host that a new client has joined the network
             foreach ($hosts as $h) {
-                $url = "http://{$h['Host']['url']}/hosts/add";
+                $url = "http://{$h['Host']['url']}/hosts/add?key={$h['Host']['key']}";
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_POST, 1);
@@ -123,7 +131,7 @@ class DocumentsController extends AppController {
             ));
 
             // send document and relevant metadata to client
-            $url = "http://{$host['Host']['url']}/documents/acquire";
+            $url = "http://{$host['Host']['url']}/documents/acquire?key={$host['Host']['key']}";
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -142,7 +150,7 @@ class DocumentsController extends AppController {
     }
 
     /**
-     * View a document hosted on the client
+     * View a document hosted on the server
      *
      * @param $id ID of document to view
      *

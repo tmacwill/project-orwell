@@ -22,8 +22,19 @@ class AppController extends Controller {
         }
     }
 
+    /**
+     * Make a request to the central server
+     *
+     * @param $url URL to request
+     * @param $post Post data, optional
+     *
+     */
     public function request($url, $post = null) {
-        // create curl object pointing to given url
+        // append api key
+        $key = Configure::read('apiKey');
+        $url .= (strpos($url, '?') === false) ? "?key=$key" : "&key=$key";
+
+        // create curl object pointing to given url and append api key
         $ch = curl_init(SERVER_URL . $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -38,5 +49,16 @@ class AppController extends Controller {
         curl_close($ch);
 
         return $response;
+    }
+
+    /**
+     * Verify the presence of an API key in the url
+     *
+     */
+    public function verifyKey() {
+        $key = Configure::read('apiKey');
+
+        if (!$key || !isset($_GET['key']) || $key != $_GET['key'])
+            exit;
     }
 }

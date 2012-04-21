@@ -1,4 +1,7 @@
 <?php
+
+    Configure::write('apiKey', '356a192b7913b04c54574d18c28d46e6395428ab');
+
 /**
  * This is core configuration file.
  *

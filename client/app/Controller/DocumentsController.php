@@ -3,11 +3,10 @@
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
-    public $requireUser = array('add', 'acquire', 'browse', 'download', 'manage');
+    public $requireUser = array('add', 'browse', 'download', 'manage');
 
     public function beforeFilter() {
         parent::beforeFilter();
-
         Controller::loadModel('Host');
     }
 
@@ -26,16 +25,35 @@ class DocumentsController extends AppController {
             ));
 
             // host this document, since we uploaded it
-            $this->request->data['id'] = $response['Document']['id'];
-            $this->acquire();
+            if (isset($response['Document']['id']) && $response['Document']['id']) {
+                $this->request->data['id'] = $response['Document']['id'];
+                $this->acquireDocument();
+            }
+
+            // upload failed, so redirect back to document management
+            else {
+                $this->redirect('/documents/manage');
+                exit;
+            }
         }
     }
 
     /**
-     * Acquire a file to host
+     * Wrapper for document acquisition method, checking api key first
      *
      */
     public function acquire() {
+        // make sure valid api key is given
+        $this->verifyKey();
+        
+        $this->acquireDocument();
+    }
+
+    /**
+     * Acquire a file to host 
+     *
+     */
+    private function acquireDocument() {
         // hash document
         $file = file_get_contents($_FILES['file']['tmp_name']);
         $md5 = md5($file);
@@ -89,9 +107,14 @@ class DocumentsController extends AppController {
 
         // get list of documents from the central server, filtering those already hosted by client
         $all_documents = $this->request('documents/all');
-        $all_documents = array_filter($all_documents['documents'], function($e) use ($document_ids) {
-            return !in_array($e['Document']['id'], $document_ids);
-        });
+
+        // make sure server returned a valid list of documents
+        if ($all_documents)
+            $all_documents = array_filter($all_documents['documents'], function($e) use ($document_ids) {
+                return !in_array($e['Document']['id'], $document_ids);
+            });
+        else
+            $all_documents = array();
 
         // send documents to view
         $this->set('documents', $all_documents);
