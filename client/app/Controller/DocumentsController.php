@@ -3,6 +3,8 @@
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
+    public $requireUser = array('add', 'acquire', 'browse', 'download', 'manage');
+
     public function beforeFilter() {
         parent::beforeFilter();
 

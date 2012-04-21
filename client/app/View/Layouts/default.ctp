@@ -41,10 +41,15 @@
     <div id="nav-container">
         <div id="nav">
             <a id="nav-logo" href="<?= $this->webroot ?>">Project Orwell</a>
-            <div class="nav-links">
-                <a href="<?= $this->webroot ?>documents/manage">My Documents</a>
-                <a href="<?= $this->webroot ?>documents/browse">Browse Documents</a>
-            </div>
+            <?php if (isset($_SESSION['user'])): ?>
+                <div class="nav-links">
+                    <a href="<?= $this->webroot ?>documents/manage">My Documents</a>
+                    <a href="<?= $this->webroot ?>documents/browse">Browse Documents</a>
+                </div>
+                <a id="nav-login" href="<?= $this->webroot ?>users/logout">Logout</a>
+            <?php else: ?>
+                <a id="nav-login" href="<?= $this->webroot ?>users/login">Login</a>
+            <?php endif; ?>
         </div>
     </div>
 
