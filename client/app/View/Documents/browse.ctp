@@ -13,7 +13,7 @@
 
     <ul class="list">
         <?php foreach ($documents as $document): ?>
-            <li>
+            <li class="document-row" data-document-id="<?= $document['Document']['id'] ?>">
                 <span class="document-name">
                     <?php $count = count($document['HostDocuments']); ?>
                     <?= $document['Document']['name'] ?>&nbsp;
@@ -24,10 +24,9 @@
                 </span>
 
                 <div class="hover-controls">
-                    <a href="<?= $this->webroot ?>documents/download/<?= $document['Document']['id'] ?>"
-                            class="btn btn-primary">
+                    <button class="btn btn-primary btn-download">
                         <i class="icon-download icon-white"></i> Host
-                    </a>
+                    </button>
                 </div>
             </li>
         <?php endforeach; ?>

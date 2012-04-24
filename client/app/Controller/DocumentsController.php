@@ -181,7 +181,7 @@ class DocumentsController extends AppController {
         $this->Host->saveAll($data);
 
         // redirect to document management screen
-        $this->redirect('/documents/manage');
+        echo json_encode(array('success' => true));
         exit;
     }
 

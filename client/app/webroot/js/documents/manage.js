@@ -20,7 +20,7 @@ $(function() {
                 if (response.same) {
                     // update button
                     t.html('<i class="icon-ok icon-white"></i> Verifed!').attr('disabled', false)
-                        .removeClass('btn-danger').addClass('btn-success');
+                        .addClass('btn-success');
                 }
 
                 // documents are different, so view diff
