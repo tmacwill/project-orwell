@@ -6,15 +6,15 @@
     </div>
     <ul class="list">
         <?php foreach ($documents as $document): ?>
-            <li data-document-id="<?= $document['Document']['id'] ?>">
+            <li class="document-row" data-document-id="<?= $document['Document']['id'] ?>">
                 <span class="document-name"><?= $document['Document']['name'] ?></span>
 
                 <div class="hover-controls">
-                    <button class="hover-verify btn btn-primary">
+                    <a href="#" class="btn-verify btn btn-primary">
                         <i class="icon-ok icon-white"></i> Verify
-                    </button>
+                    </a>
                     <a href="<?= $this->webroot ?>documents/view/<?= $document['Document']['id'] ?>" 
-                            target="_blank" class="hover-verify btn">
+                            target="_blank" class="btn-view btn">
                         <i class="icon-share-alt"></i> View
                     </a>
                 </div>

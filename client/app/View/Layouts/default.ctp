@@ -36,6 +36,10 @@
         echo $this->fetch('script');
     ?>
 
+    <script>
+        var webroot = "<?= $this->webroot ?>";
+    </script>
+
 </head>
 <body>
     <div id="nav-container">

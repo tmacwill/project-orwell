@@ -121,6 +121,46 @@ class DocumentsController extends AppController {
     }
 
     /**
+     * Display the differences between two text files
+     *
+     */
+    public function diff($id) {
+        require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'Diff.php';
+        require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'Diff' . DS . 'Renderer' . DS . 
+            'Html' . DS . 'SideBySide.php';
+        require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'Diff.php';
+
+        // get document to verify
+        $document = $this->Document->findById($id);
+        if (!$document)
+            exit;
+
+        // read local file
+        $document_contents = file_get_contents($document['Document']['path']);
+
+        // read file to compare to
+        $compare_url = "http://{$_GET['compare']}/documents/view/$id";
+        $compare_contents = file_get_contents($compare_url);
+
+        // make sure neither file is binary
+        if (strpos($document_contents, "\x00") !== false || strpos($compare_contents, "\x00") !== false)
+            exit;
+
+        // compute and render diff
+        $diff = new Diff(explode("\n", $document_contents), explode("\n", $compare_contents));
+        $renderer = new Diff_Renderer_Html_SideBySide;
+        $diff_contents = $diff->render($renderer);
+
+        // replace library default text
+        $diff_contents = preg_replace('/<th colspan="2">Old Version<\/th>/', 
+            "<th colspan=\"2\">{$document['Document']['filename']} (you)</th>", $diff_contents);
+        $diff_contents = preg_replace('/<th colspan="2">New Version<\/th>/', 
+            "<th colspan=\"2\">http://{$_GET['compare']}</th>", $diff_contents);
+
+        $this->set('diff', $diff_contents);
+    }
+
+    /**
      * Download a document from the central server
      *
      * @param $id ID of document to download
@@ -155,6 +195,65 @@ class DocumentsController extends AppController {
     }
 
     /**
+     * Verify the integrity of a single document
+     *
+     * @param $id ID of document to verify
+     *
+     */
+    public function verify($id) {
+        // get document to verify
+        $document = $this->Document->findById($id);
+        if (!$document) {
+            echo json_encode(array('success' => false));
+            exit;
+        }
+
+        // read our document
+        $client_document = file_get_contents($document['Document']['path']);
+
+        // get a random host to compare against
+        $host = $this->Host->find('first', array(
+            'conditions' => array('document_id' => $id),
+            'order' => 'rand()'
+        ));
+
+        // make sure valid host was found
+        if (!$host) {
+            echo json_encode(array('success' => false));
+            exit;
+        }
+        
+        // read file to compare against
+        $url = "http://{$host['Host']['url']}/documents/view/$id";
+        $compare_document = file_get_contents($url);
+
+        // check if documents are the same
+        if (md5($client_document) == md5($compare_document) &&
+            sha1($client_document) == sha1($compare_document) &&
+            base64_encode($client_document) == base64_encode($compare_document)) {
+
+            echo json_encode(array('success' => true, 'same' => true));
+        }
+
+        // documents are not the same
+        else {
+            // only non-binary files should be diff-able
+            $should_compare = true;
+            if (strpos($client_document, "\x00") !== false || strpos($compare_document, "\x00") !== false)
+                $should_compare = false;
+
+            echo json_encode(array(
+                'success' => true, 
+                'same' => false,
+                'document' => $document['Document']['id'],
+                'compare' => ($should_compare) ? $host['Host']['url'] : false
+            ));
+        }
+
+        exit;
+    }
+
+    /**
      * View a document hosted on the client
      *
      * @param $id ID of document to view
@@ -179,5 +278,7 @@ class DocumentsController extends AppController {
             flush();
             echo $contents;
         }
+
+        exit;
     }
 }
