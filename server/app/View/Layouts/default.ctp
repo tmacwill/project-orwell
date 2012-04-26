@@ -42,11 +42,12 @@
         <div id="nav">
             <a id="nav-logo" href="<?= $this->webroot ?>">Project Orwell</a>
             <?php if (isset($_SESSION['host'])): ?>
-                <a id="nav-login" href="<?= $this->webroot ?>hosts/view/<?= $_SESSION['host']['id'] ?>">
-                    <?= $_SESSION['host']['name'] ?>
-                </a>
+                <div class="nav-links">
+                    <a href="<?= $this->webroot ?>hosts/view">My Orwell</a>
+                </div>
+                <a id="nav-login" href="<?= $this->webroot ?>hosts/logout">Logout</a>
             <?php else: ?>
-                <a id="nav-login">Login</a>
+                <a id="nav-login" href="<?= $this->webroot ?>hosts/login">Login</a>
             <?php endif; ?>
         </div>
     </div>

@@ -1,0 +1,42 @@
+#!/usr/bin/env php
+<?php
+
+$BASE_URL = "http://dev/server";
+
+echo "Welcome to the Project Orwell installer.\n";
+
+$stdin = fopen('php://stdin', 'r');
+
+// get installation directory
+echo "Install directory [/var/www/html/]: ";
+$install_directory = trim(fgets($stdin));
+if (!$install_directory)
+    $install_directory = '/var/www/html/';
+
+// make sure directory ends in a trailing /
+if ($install_directory[strlen($install_directory) - 1] != '/')
+    $install_directory .= '/';
+
+// download client 
+echo "Downloading Orwell...\n";
+shell_exec("git clone git://github.com/tmac721/project-orwell.git $install_directory");
+
+// clean up files
+echo "Cleaning up...\n";
+shell_exec("rm -rf {$install_directory}README.markdown {$install_directory}clean.php {$install_directory}server");
+shell_exec("mv {$install_directory}client/* $install_directory");
+shell_exec("mv {$install_directory}client/.htaccess $install_directory");
+shell_exec("rm -rf {$install_directory}client");
+
+// get user's API key
+echo "Your API Key is available at $BASE_URL, log in to view it.\n";
+echo "API Key: ";
+$key = trim(fgets($stdin));
+
+// add api key to config file
+echo "Installing API key...\n";
+shell_exec("echo 'Configure::write(\"apiKey\", \"{$key}\");' >> {$install_directory}app/Config/core.php");
+
+echo "Your Orwell is now installed!\n";
+
+?>

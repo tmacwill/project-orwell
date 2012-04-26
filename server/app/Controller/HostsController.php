@@ -10,13 +10,16 @@ class HostsController extends AppController {
     public function add() {
         // form submitted
         if ($this->request->is('post')) {
-            // save new host
+            // encrypt password and generate api key
             $this->request->data['password'] = sha1($this->request->data['password']);
+            $this->request->data['key'] = sha1(self::SALT . mt_rand() . time());
+
+            // save host
             $host = $this->Host->save($this->request->data);
 
             // log user in and direct to hosts page
             $_SESSION['host'] = $host['Host'];
-            $this->redirect("/hosts/view/{$_SESSION['host']['id']}");
+            $this->redirect("/hosts/view");
             exit;
         }
     }
@@ -49,9 +52,8 @@ class HostsController extends AppController {
             }
 
             // unsuccessful login
-            else {
+            else
                 $this->set('error', 'The email or password you entered was not correct');
-            }
         }
     }
 
@@ -62,5 +64,17 @@ class HostsController extends AppController {
     public function logout() {
         session_destroy();
         $this->redirect('/');
+    }
+
+    /**
+     * View the information for the current host
+     *
+     */
+    public function view() {
+        // make sure user is logged in
+        if (!isset($_SESSION['host'])) {
+            $this->redirect('/hosts/login');
+            exit;
+        }
     }
 }
