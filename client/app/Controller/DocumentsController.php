@@ -200,9 +200,15 @@ class DocumentsController extends AppController {
      * @param $id ID of document to verify
      *
      */
-    public function verify($id) {
-        // get document to verify
-        $document = $this->Document->findById($id);
+    public function verify($id = 0) {
+        // if no ID given, pick a random document
+        if ($id == 0)
+            $document = $this->Document->find('first', array('order' => 'rand()'));
+        // get specified document
+        else 
+            $document = $this->Document->findById($id);
+
+        // make sure document exists
         if (!$document) {
             echo json_encode(array('success' => false));
             exit;
@@ -213,7 +219,7 @@ class DocumentsController extends AppController {
 
         // get a random host to compare against
         $host = $this->Host->find('first', array(
-            'conditions' => array('document_id' => $id),
+            'conditions' => array('document_id' => $document['Document']['id']),
             'order' => 'rand()'
         ));
 
@@ -224,7 +230,7 @@ class DocumentsController extends AppController {
         }
         
         // read file to compare against
-        $url = "http://{$host['Host']['url']}/documents/view/$id";
+        $url = "http://{$host['Host']['url']}/documents/view/{$document['Document']['id']}";
         $compare_document = file_get_contents($url);
 
         // check if documents are the same

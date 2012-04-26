@@ -6,7 +6,7 @@
     <div id="installation-steps" class="row">
         <div class="span4">
             <h2>Step 1</h2>
-            <a href="/install">Download</a> and run the installer.
+            <a href="<?= $this->webroot ?>install">Download</a> and run the installer.
         </div>
         <div class="span4">
             <h2>Step 2</h2>
