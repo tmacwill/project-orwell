@@ -8,6 +8,7 @@ class DocumentsController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         Controller::loadModel('Host');
+        Controller::loadModel('User');
     }
 
     /**
@@ -247,6 +248,27 @@ class DocumentsController extends AppController {
             $should_compare = true;
             if (strpos($client_document, "\x00") !== false || strpos($compare_document, "\x00") !== false)
                 $should_compare = false;
+
+            // retrieve users on the client
+            $users = $this->User->find('all');
+
+            // send email
+            require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'phpmailer' . DS . 'phpmailer.inc.php';
+            $mail = new PHPMailer();  
+            $mail->IsSMTP(); 
+            $mail->SMTPDebug = 0;
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = 'ssl';
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 465; 
+            $mail->Username = 'projectorwell@gmail.com';
+            $mail->Password = 'ProjectOrwell42';
+            $mail->SetFrom('projectorwell@gmail.com', 'Project Orwell');
+            $mail->Subject = 'Document Integrity Compromised!';
+            $mail->Body = "A document hosted on your Orwell, {$document['Document']['name']}, does not match the copy hosted by http://{$host['Host']['url']}.";
+            foreach ($users as $user)
+                $mail->AddAddress($user['User']['email']);
+            $mail->Send();
 
             echo json_encode(array(
                 'success' => true, 
