@@ -37,6 +37,27 @@ $key = trim(fgets($stdin));
 echo "Installing API key...\n";
 shell_exec("echo 'Configure::write(\"apiKey\", \"{$key}\");' >> {$install_directory}app/Config/core.php");
 
+// get mysql info
+echo "MySQL host [localhost]: ";
+$host = trim(fgets($stdin));
+if (!$host)
+    $host = 'localhost';
+echo "MySQL username: ";
+$username = trim(fgets($stdin));
+echo "MySQL password: ";
+$password = trim(fgets($stdin));
+
+// create database
+mysql_connect($host, $username, $password) or die('MySQL credentials incorrect.');
+mysql_query('create database orwell_client') or die('Could not create MySQL database');
+
+// change database config file
+shell_exec("sed -i \"s/'login' => 'root'/'login' => '$username'/g\" {$install_directory}app/Config/database.php");
+shell_exec("sed -i \"s/'password' => 'crimson'/'password' => '$password'/g\" {$install_directory}app/Config/database.php");
+
+// import schema
+shell_exec("{$install_directory}app/Console/cake schema create");
+
 echo "Your Orwell is now installed!\n";
 
 ?>

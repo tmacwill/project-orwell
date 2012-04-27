@@ -80,10 +80,19 @@ h1, h2, h3 {
     background: white;
     box-shadow: 0 0 6px 3px #ccc;
     display: block;
-    height: 400px;
+    height: 250px;
     margin: 0 auto;
     margin-top: 50px;
+    padding: 10px;
+    text-align: center;
     width: 900px;
+}
+
+.feature-description {
+    font-size: 18px;
+    line-height: 1.2em;
+    margin-top: 10px;
+    text-align: left;
 }
 
 #form-register, #form-login {
