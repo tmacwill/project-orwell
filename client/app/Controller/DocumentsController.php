@@ -158,6 +158,8 @@ class DocumentsController extends AppController {
         $diff_contents = preg_replace('/<th colspan="2">New Version<\/th>/', 
             "<th colspan=\"2\">http://{$_GET['compare']}</th>", $diff_contents);
 
+        $this->set('document', $document);
+        $this->set('compare', $_GET['compare']);
         $this->set('diff', $diff_contents);
     }
 
@@ -193,6 +195,50 @@ class DocumentsController extends AppController {
     public function manage() {
         $documents = $this->Document->find('all');
         $this->set(compact('documents'));
+    }
+
+    /**
+     * Create a snapshot of a document before it is verified
+     *
+     * @param $id ID of document to snapshot
+     * @return Whether or not snapshot already existed
+     *
+     */
+    public function snapshot($id) {
+        // get document contents
+        $document = $this->Document->findById($id);
+        $document_contents = file_get_contents($document['Document']['path']);
+        $md5 = md5($document_contents);
+        $sha1 = sha1($document_contents);
+
+        // make sure snapshot directory exists
+        $snapshot_path = ROOT . DS . APP_DIR . DS . 'snapshots' . DS . $document['Document']['id'];
+        @mkdir($snapshot_path, 0777, true);
+
+        // iterate over existing snapshots to ensure de-duplication
+        $found = false;
+        $iterator = new RecursiveDirectoryIterator($snapshot_path, FilesystemIterator::SKIP_DOTS); 
+        foreach (new RecursiveIteratorIterator($iterator) as $file) { 
+            $file_contents = file_get_contents($file->getRealPath());
+            // check if current snapshot already exists on disk
+            if ($file->isFile() && md5($file_contents) == $md5 && sha1($file_contents) == $sha1) {
+                $found = true;
+                break;
+            }
+        }
+
+        // file not found, so create snapshot
+        if (!$found) {
+            // create new directory for snapshot
+            $snapshot_path .= DS . time();
+            @mkdir($snapshot_path, 0777, true);
+            $snapshot_path .= DS . $document['Document']['filename'];
+
+            // copy file into new directory 
+            copy($document['Document']['path'], $snapshot_path);
+        }
+
+        return $found;
     }
 
     /**
@@ -253,7 +299,7 @@ class DocumentsController extends AppController {
             $users = $this->User->find('all');
 
             // send email
-            require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'phpmailer' . DS . 'phpmailer.inc.php';
+            require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'phpmailer' . DS . 'class.phpmailer.php';
             $mail = new PHPMailer();  
             $mail->IsSMTP(); 
             $mail->SMTPDebug = 0;
@@ -263,9 +309,10 @@ class DocumentsController extends AppController {
             $mail->Port = 465; 
             $mail->Username = 'projectorwell@gmail.com';
             $mail->Password = 'ProjectOrwell42';
-            $mail->SetFrom('projectorwell@gmail.com', 'Project Orwell');
+            $mail->From = 'projectorwell@gmail.com';
+            $mail->FromName = 'Project Orwell';
             $mail->Subject = 'Document Integrity Compromised!';
-            $mail->Body = "A document hosted on your Orwell, {$document['Document']['name']}, does not match the copy hosted by http://{$host['Host']['url']}.";
+            $mail->Body = "A document hosted on your Orwell, {$document['Document']['name']}, does not match the copy hosted by http://{$host['Host']['url']}. Please log into your Orwell to resolve this conflict.";
             foreach ($users as $user)
                 $mail->AddAddress($user['User']['email']);
             $mail->Send();
