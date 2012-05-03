@@ -144,23 +144,32 @@ class DocumentsController extends AppController {
         $compare_contents = file_get_contents($compare_url);
 
         // make sure neither file is binary
+        $binary = false;
         if (strpos($document_contents, "\x00") !== false || strpos($compare_contents, "\x00") !== false)
-            exit;
+            $binary = true;
 
-        // compute and render diff
-        $diff = new Diff(explode("\n", $document_contents), explode("\n", $compare_contents));
-        $renderer = new Diff_Renderer_Html_SideBySide;
-        $diff_contents = $diff->render($renderer);
-
-        // replace library default text
-        $diff_contents = preg_replace('/<th colspan="2">Old Version<\/th>/', 
-            "<th colspan=\"2\">{$document['Document']['filename']} (you)</th>", $diff_contents);
-        $diff_contents = preg_replace('/<th colspan="2">New Version<\/th>/', 
-            "<th colspan=\"2\">http://{$_GET['compare']}</th>", $diff_contents);
-
+        // send host info to view
         $this->set('document', $document);
         $this->set('compare', $_GET['compare']);
-        $this->set('diff', $diff_contents);
+
+        // compute and render diff for text files
+        if (!$binary) {
+            $diff = new Diff(explode("\n", $document_contents), explode("\n", $compare_contents));
+            $renderer = new Diff_Renderer_Html_SideBySide;
+            $diff_contents = $diff->render($renderer);
+
+            // replace library default text
+            $diff_contents = preg_replace('/<th colspan="2">Old Version<\/th>/', 
+                "<th colspan=\"2\">{$document['Document']['filename']} (you)</th>", $diff_contents);
+            $diff_contents = preg_replace('/<th colspan="2">New Version<\/th>/', 
+                "<th colspan=\"2\">http://{$_GET['compare']}</th>", $diff_contents);
+
+            $this->set('diff', $diff_contents);
+        }
+
+        // show download buttons for binary files
+        else
+            $this->set('diff', false);
     }
 
     /**
@@ -319,11 +328,6 @@ class DocumentsController extends AppController {
 
         // documents are not the same
         else {
-            // only non-binary files should be diff-able
-            $should_compare = true;
-            if (strpos($client_document, "\x00") !== false || strpos($compare_document, "\x00") !== false)
-                $should_compare = false;
-
             // retrieve users on the client
             $users = $this->User->find('all');
             preg_match('/^([\w\/]+)\/documents\/verify/', "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", $matches);
@@ -331,7 +335,8 @@ class DocumentsController extends AppController {
 
             // send email
             require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'phpmailer' . DS . 'class.phpmailer.php';
-            $mail = new PHPMailer();  
+            $mail = new PHPMailer();
+            $mail->ClearAddresses();
             $mail->IsSMTP(); 
             $mail->SMTPDebug = 0;
             $mail->SMTPAuth = true;

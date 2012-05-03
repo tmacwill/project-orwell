@@ -25,22 +25,13 @@ $(function() {
 
                 // documents are different, so view diff
                 else {
-                    // documents can be compared
-                    if (response.compare) {
-                        // create url to diff file with host it was compared against
-                        var url = webroot + 'documents/diff/' + response.document;
-                        url += '?compare=' + response.compare;
+                    // create url to diff file with host it was compared against
+                    var url = webroot + 'documents/diff/' + response.document;
+                    url += '?compare=' + response.compare;
 
-                        // update button
-                        t.html('<i class="icon-remove icon-white"></i> View differences').attr('disabled', false)
-                            .attr('href', url).attr('target', '_blank').addClass('btn-danger');
-                    }
-
-                    // documents cannot be compared
-                    else {
-                        // update button
-                        t.html('<i class="icon-remove icon-white"></i> Documents are different!').addClass('btn-danger');
-                    }
+                    // update button
+                    t.html('<i class="icon-remove icon-white"></i> View differences').attr('disabled', false)
+                        .attr('href', url).attr('target', '_blank').addClass('btn-danger');
                 }
             }
         });
