@@ -3,7 +3,7 @@
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
-    public $requireUser = array('add', 'browse', 'download', 'manage');
+    public $requireUser = array('add', 'browse', 'download', 'manage', 'repair');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -20,7 +20,7 @@ class DocumentsController extends AppController {
         if ($this->request->is('post')) {
             // send uploaded document to central server
             $response = $this->request("documents/add?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", array(
-                'file' => '@' .$_FILES['file']['tmp_name'],
+                'file' => '@' . $_FILES['file']['tmp_name'],
                 'filename' => $_FILES['file']['name'],
                 'name' => $this->request->data['name']
             ));
@@ -202,8 +202,9 @@ class DocumentsController extends AppController {
      *
      */
     public function manage() {
+        $stats = $this->request("hosts/stats?client={$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         $documents = $this->Document->find('all');
-        $this->set(compact('documents'));
+        $this->set(compact('stats', 'documents'));
     }
 
     /**

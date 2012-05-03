@@ -24,12 +24,16 @@
 </div>
 
 <div id="add-document-container">
-    <button id="btn-add-document" class="btn btn-primary btn-large">
-        <i class="icon-upload icon-white"></i> Add a new Document
-    </button>
-    <form id="form-add-document" method="post" action="<?= $this->webroot ?>documents/add" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Document Name (e.g., Nineteen Eighty-Four)" />
-        <input type="file" name="file" /><br />
-        <input id="btn-add-document-submit" type="submit" class="btn btn-large btn-primary" value="Add" />
-    </form>
+    <?php if ($stats['uploaded'] <= 5 || $stats['hosted'] >= $stats['uploaded']): ?>
+        <button id="btn-add-document" class="btn btn-primary btn-large">
+            <i class="icon-upload icon-white"></i> Add a new Document
+        </button>
+        <form id="form-add-document" method="post" action="<?= $this->webroot ?>documents/add" enctype="multipart/form-data">
+            <input type="text" name="name" placeholder="Document Name (e.g., Nineteen Eighty-Four)" />
+            <input type="file" name="file" /><br />
+            <input id="btn-add-document-submit" type="submit" class="btn btn-large btn-primary" value="Add" />
+        </form>
+    <?php else: ?>
+        <h2>You need to host a document before you can upload more documents!</h2>
+    <?php endif; ?>
 </div>

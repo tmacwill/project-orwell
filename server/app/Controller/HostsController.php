@@ -8,6 +8,7 @@ class HostsController extends AppController {
 
         Controller::loadModel('Document');
         Controller::loadModel('Host');
+        Controller::loadModel('HostDocuments');
     }
 
     /**
@@ -103,6 +104,51 @@ class HostsController extends AppController {
         $mail->Send();
 
         echo json_encode(array('success' => true));
+        exit;
+    }
+
+    /**
+     * Determine how many more documents the client can upload
+     * Clients get 5 free uploads, then need to give-and-take to host more
+     *
+     */
+    public function stats() {
+        // get host from url
+        preg_match('/^([\w\/]+)\/documents\/manage/', $_GET['client'], $matches);
+        $host = $this->Host->findByUrl($matches[1]);
+
+        // get all documents that the client is hosting 
+        $documents = $this->HostDocuments->find('all', array(
+            'order' => array('id ASC'),
+            'group' => array('document_id')
+        ));
+
+        // count how many documents the client has uploaded
+        $uploaded = 0;
+        $uploaded_ids = array();
+        foreach ($documents as $document) {
+            // if the client is the first one to host, then the client must have uploaded
+            if ($document['HostDocuments']['host_id'] == $host['Host']['id']) {
+                $uploaded++;
+                $uploaded_ids[] = $document['HostDocuments']['document_id'];
+            }
+        }
+
+        // count how many documents the client is hosting
+        $documents = $this->HostDocuments->find('all');
+        $hosted = 0;
+        foreach ($documents as $document) {
+            // if we are hosting a document but have not uploaded it, then we must be hosting it
+            if ($document['HostDocuments']['host_id'] == $host['Host']['id'] && 
+                !in_array($document['HostDocuments']['document_id'], $uploaded_ids))
+                $hosted++;
+        }
+
+        echo json_encode(array(
+            'success' => true,
+            'uploaded' => $uploaded,
+            'hosted' => $hosted
+        ));
         exit;
     }
 
