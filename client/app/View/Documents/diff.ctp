@@ -6,6 +6,7 @@
     <div class="row" style="text-align: center">
         <a href="<?= $this->webroot ?>hosts/notify/<?= $document['Document']['id'] ?>?compare=<?= $compare ?>" 
             class="btn btn-large btn-success">My copy is correct.</a>
-        <a href="#" class="btn btn-large btn-danger">The other copy is correct.</a>
+        <a href="<?= $this->webroot ?>documents/repair/<?= $document['Document']['id']?>?client=<?= $compare ?>"
+            class="btn btn-large btn-danger">The other copy is correct.</a>
     </div>
 </div>

@@ -198,6 +198,35 @@ class DocumentsController extends AppController {
     }
 
     /**
+     * Repair our document by downloading if from another host
+     *
+     * @param $id ID of document to repair
+     *
+     */
+    public function repair($id) {
+        // download document from new client
+        $client = $_GET['client'];
+        $url = "http://$client/documents/view/$id";
+        $new_contents = file_get_contents($url);
+
+        // determine document to replace
+        $document = $this->Document->findById($id);
+        if (!$document) {
+            echo json_encode(array('success' => false));
+            exit;
+        }
+
+        // replace document
+        $fh = fopen($document['Document']['path'], 'w');
+        fwrite($fh, $new_contents);
+        fclose($fh);
+
+        // redirect to document manager
+        $this->redirect("/documents/manage");
+        exit;
+    }
+
+    /**
      * Create a snapshot of a document before it is verified
      *
      * @param $id ID of document to snapshot
@@ -297,6 +326,8 @@ class DocumentsController extends AppController {
 
             // retrieve users on the client
             $users = $this->User->find('all');
+            preg_match('/^([\w\/]+)\/documents\/verify/', "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", $matches);
+            $client_url = $matches[1];
 
             // send email
             require_once ROOT . DS . APP_DIR . DS . 'Lib' . DS . 'phpmailer' . DS . 'class.phpmailer.php';
@@ -312,7 +343,7 @@ class DocumentsController extends AppController {
             $mail->From = 'projectorwell@gmail.com';
             $mail->FromName = 'Project Orwell';
             $mail->Subject = 'Document Integrity Compromised!';
-            $mail->Body = "A document hosted on your Orwell, {$document['Document']['name']}, does not match the copy hosted by http://{$host['Host']['url']}. Please log into your Orwell to resolve this conflict.";
+            $mail->Body = "A document hosted on your Orwell, {$document['Document']['name']}, does not match the copy hosted by http://{$host['Host']['url']}. Please visit http://$client_url/documents/diff/{$document['Document']['id']}?compare={$host['Host']['url']} to resolve this conflict.";
             foreach ($users as $user)
                 $mail->AddAddress($user['User']['email']);
             $mail->Send();
