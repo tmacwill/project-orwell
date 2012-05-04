@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file DocumentsController.php
+ * @brief Controller for document operations.
+ * @author Tommy MacWilliam
+ *
+ */
+
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
@@ -19,6 +26,10 @@ class DocumentsController extends AppController {
 
     /**
      * Add a new document
+     *
+     * @param $client Client that has uploaded the document
+     * @param $name Name of the document
+     * @param $filename Filename of the document
      *
      */
     public function add() {
@@ -89,9 +100,10 @@ class DocumentsController extends AppController {
     }
 
     /**
-     * Download a document to a client
+     * Download a document to a client and notify any existing verification networks
      *
      * @param $id ID of document to download
+     * @param $client URL of host document is being downloaded to
      *
      */
     public function download($id) {

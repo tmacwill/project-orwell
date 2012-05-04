@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file DocumentsController.php
+ * @brief Controller for document operations.
+ * @author Tommy MacWilliam
+ *
+ */
+
 App::uses('Controller', 'Controller');
 
 class DocumentsController extends AppController {
@@ -13,6 +20,8 @@ class DocumentsController extends AppController {
 
     /**
      * Add a new document
+     *
+     * @param $name Name of the document
      *
      */
     public function add() {
@@ -52,6 +61,8 @@ class DocumentsController extends AppController {
 
     /**
      * Acquire a file to host 
+     *
+     * @param $name Name of the document
      *
      */
     private function acquireDocument() {
@@ -123,6 +134,9 @@ class DocumentsController extends AppController {
 
     /**
      * Display the differences between two text files
+     *
+     * @param $id ID of the locally-hosted document
+     * @param $compare URL of the document to compare to
      *
      */
     public function diff($id) {
@@ -211,6 +225,7 @@ class DocumentsController extends AppController {
      * Repair our document by downloading if from another host
      *
      * @param $id ID of document to repair
+     * @param $client Client from which to download document
      *
      */
     public function repair($id) {
@@ -283,7 +298,7 @@ class DocumentsController extends AppController {
     /**
      * Verify the integrity of a single document
      *
-     * @param $id ID of document to verify
+     * @param $id ID of document to verify. If not given, a random document is selected
      *
      */
     public function verify($id = 0) {

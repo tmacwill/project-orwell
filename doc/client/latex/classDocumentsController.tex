@@ -1,0 +1,200 @@
+\hypertarget{classDocumentsController}{
+\section{\-Documents\-Controller \-Class \-Reference}
+\label{classDocumentsController}\index{\-Documents\-Controller@{\-Documents\-Controller}}
+}
+\-Inheritance diagram for \-Documents\-Controller\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDocumentsController}
+\end{center}
+\end{figure}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classDocumentsController_ad4618f5bb5b8b51833956621b0071907}{
+{\bfseries before\-Filter} ()}
+\label{classDocumentsController_ad4618f5bb5b8b51833956621b0071907}
+
+\item 
+\hyperlink{classDocumentsController_ae9358b6908585ca36b92aa78afb657db}{add} ()
+\item 
+\hyperlink{classDocumentsController_ac01e57a9403d02d740e6e4fcce3e709b}{acquire} ()
+\item 
+\hyperlink{classDocumentsController_abe74e68167dd907c1e8428e399e10211}{browse} ()
+\item 
+\hyperlink{classDocumentsController_a44c8129ba74009effeaf9aa7add0d01f}{diff} (\$id)
+\item 
+\hyperlink{classDocumentsController_a5b77d80b7b2393a2b03202a9a50e02d7}{download} (\$id)
+\item 
+\hyperlink{classDocumentsController_acef7de0607f6c433bde6f1515e37d32f}{manage} ()
+\item 
+\hyperlink{classDocumentsController_a063eb26a98ab07696b2cde69f5c6a7f4}{repair} (\$id)
+\item 
+\hyperlink{classDocumentsController_a6ac7ef3b7865c256095065313cd7a87d}{snapshot} (\$id)
+\item 
+\hyperlink{classDocumentsController_adee0e3f5d87ba2bbc74a30ab4934bab7}{verify} (\$id=0)
+\item 
+\hyperlink{classDocumentsController_ad68485643e01e97a96f077d535865f05}{view} (\$id)
+\end{DoxyCompactItemize}
+\subsection*{\-Public \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classDocumentsController_a6a79bec70bfcafa825c693be2971f618}{
+{\bfseries \$require\-User} = array('add', 'browse', 'download', 'manage', 'repair')}
+\label{classDocumentsController_a6a79bec70bfcafa825c693be2971f618}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{classDocumentsController_ac01e57a9403d02d740e6e4fcce3e709b}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!acquire@{acquire}}
+\index{acquire@{acquire}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{acquire}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::acquire (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_ac01e57a9403d02d740e6e4fcce3e709b}
+\-Wrapper for document acquisition method, checking api key first \hypertarget{classDocumentsController_ae9358b6908585ca36b92aa78afb657db}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!add@{add}}
+\index{add@{add}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{add}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::add (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_ae9358b6908585ca36b92aa78afb657db}
+\-Add a new document
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$name} & \-Name of the document \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDocumentsController_abe74e68167dd907c1e8428e399e10211}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!browse@{browse}}
+\index{browse@{browse}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{browse}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::browse (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_abe74e68167dd907c1e8428e399e10211}
+\-Browse all documents on the central server \hypertarget{classDocumentsController_a44c8129ba74009effeaf9aa7add0d01f}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!diff@{diff}}
+\index{diff@{diff}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{diff}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::diff (
+\begin{DoxyParamCaption}
+\item[{\$}]{id}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_a44c8129ba74009effeaf9aa7add0d01f}
+\-Display the differences between two text files
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of the locally-\/hosted document \\
+\hline
+{\em \$compare} & \-U\-R\-L of the document to compare to \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDocumentsController_a5b77d80b7b2393a2b03202a9a50e02d7}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!download@{download}}
+\index{download@{download}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{download}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::download (
+\begin{DoxyParamCaption}
+\item[{\$}]{id}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_a5b77d80b7b2393a2b03202a9a50e02d7}
+\-Download a document from the central server
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of document to download \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDocumentsController_acef7de0607f6c433bde6f1515e37d32f}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!manage@{manage}}
+\index{manage@{manage}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{manage}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::manage (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_acef7de0607f6c433bde6f1515e37d32f}
+\-Manage documents \hypertarget{classDocumentsController_a063eb26a98ab07696b2cde69f5c6a7f4}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!repair@{repair}}
+\index{repair@{repair}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{repair}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::repair (
+\begin{DoxyParamCaption}
+\item[{\$}]{id}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_a063eb26a98ab07696b2cde69f5c6a7f4}
+\-Repair our document by downloading if from another host
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of document to repair \\
+\hline
+{\em \$client} & \-Client from which to download document \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDocumentsController_a6ac7ef3b7865c256095065313cd7a87d}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!snapshot@{snapshot}}
+\index{snapshot@{snapshot}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{snapshot}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::snapshot (
+\begin{DoxyParamCaption}
+\item[{\$}]{id}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_a6ac7ef3b7865c256095065313cd7a87d}
+\-Create a snapshot of a document before it is verified
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of document to snapshot \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+\-Whether or not snapshot already existed 
+\end{DoxyReturn}
+\hypertarget{classDocumentsController_adee0e3f5d87ba2bbc74a30ab4934bab7}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!verify@{verify}}
+\index{verify@{verify}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{verify}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::verify (
+\begin{DoxyParamCaption}
+\item[{\$}]{id = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_adee0e3f5d87ba2bbc74a30ab4934bab7}
+\-Verify the integrity of a single document
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of document to verify. \-If not given, a random document is selected \\
+\hline
+\end{DoxyParams}
+\hypertarget{classDocumentsController_ad68485643e01e97a96f077d535865f05}{
+\index{\-Documents\-Controller@{\-Documents\-Controller}!view@{view}}
+\index{view@{view}!DocumentsController@{\-Documents\-Controller}}
+\subsubsection[{view}]{\setlength{\rightskip}{0pt plus 5cm}\-Documents\-Controller\-::view (
+\begin{DoxyParamCaption}
+\item[{\$}]{id}
+\end{DoxyParamCaption}
+)}}
+\label{classDocumentsController_ad68485643e01e97a96f077d535865f05}
+\-View a document hosted on the client
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em \$id} & \-I\-D of document to view \\
+\hline
+\end{DoxyParams}
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{DocumentsController_8php}{\-Documents\-Controller.\-php}\end{DoxyCompactItemize}

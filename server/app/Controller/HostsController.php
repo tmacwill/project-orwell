@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file HostsController.php
+ * @brief Controller for host operations.
+ * @author Tommy MacWilliam
+ *
+ */
+
 App::uses('Controller', 'Controller');
 
 class HostsController extends AppController {
@@ -13,6 +20,10 @@ class HostsController extends AppController {
 
     /**
      * Add a new host
+     *
+     * @param $email Email address for administrator
+     * @param $password Administrator password
+     * @param $url URL where new client will be hosted
      *
      */
     public function add() {
@@ -34,6 +45,9 @@ class HostsController extends AppController {
 
     /**
      * Log a user in 
+     *
+     * @param $email User's email
+     * @param $password User's password
      *
      */
     public function login() {
@@ -77,6 +91,10 @@ class HostsController extends AppController {
     /**
      * Notify a host that another host thinks they have the correct copy of the document
      *
+     * @param $document_id ID of document in question
+     * @param $client URL of notifying host
+     * @param $compare URL of host to be notified
+     *
      */
     public function notify($document_id) {
         // get given document and hosts
@@ -110,6 +128,8 @@ class HostsController extends AppController {
     /**
      * Determine how many more documents the client can upload
      * Clients get 5 free uploads, then need to give-and-take to host more
+     *
+     * @param $client Client to retrieve statistics for
      *
      */
     public function stats() {

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file UsersController.php
+ * @brief Controller for user operations.
+ * @author Tommy MacWilliam
+ *
+ */
+
 App::uses('Controller', 'Controller');
 
 class UsersController extends AppController {

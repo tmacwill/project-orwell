@@ -1,10 +1,20 @@
 <?php
 
+/**
+ * @file HostsController.php
+ * @brief Controller for host operations.
+ * @author Tommy MacWilliam
+ *
+ */
+
 App::uses('Controller', 'Controller');
 
 class HostsController extends AppController {
     /**
      * Add a host to a document
+     *
+     * @param $url URL of host to associate document with
+     * @param $document_id ID of document to associate with host
      *
      */
     public function add() {
@@ -23,6 +33,9 @@ class HostsController extends AppController {
 
     /**
      * Notify a host that our document is correct
+     *
+     * @param $document_id ID of document in question
+     * @param $compare Host to notify regarding the integrity of the document
      *
      */
     public function notify($document_id) {
