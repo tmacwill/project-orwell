@@ -24,7 +24,7 @@
 </div>
 
 <div id="add-document-container">
-    <?php if ($stats['uploaded'] <= 5 || $stats['hosted'] >= $stats['uploaded']): ?>
+    <?php if ($stats['uploaded'] < 5 || $stats['hosted'] >= $stats['uploaded']): ?>
         <button id="btn-add-document" class="btn btn-primary btn-large">
             <i class="icon-upload icon-white"></i> Add a new Document
         </button>

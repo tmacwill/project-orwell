@@ -321,9 +321,7 @@ class DocumentsController extends AppController {
 
         // check if documents are the same
         if (md5($client_document) == md5($compare_document) &&
-            sha1($client_document) == sha1($compare_document) &&
-            base64_encode($client_document) == base64_encode($compare_document)) {
-
+            sha1($client_document) == sha1($compare_document)) {
             echo json_encode(array('success' => true, 'same' => true));
         }
 
@@ -358,7 +356,7 @@ class DocumentsController extends AppController {
                 'success' => true, 
                 'same' => false,
                 'document' => $document['Document']['id'],
-                'compare' => ($should_compare) ? $host['Host']['url'] : false
+                'compare' => $host['Host']['url']
             ));
         }
 
