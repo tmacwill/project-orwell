@@ -9,6 +9,8 @@ However, content providers cannot simply rely on a version hosted by a single au
 
 Project Orwell seeks to address the problem of document integrity assurance. After registering with a central server and obtaining an API key, Orwell users download a client package that functions as a content management application. Using the client application, users can upload content for other clients to host as well as host content uploaded by other users. Because the content is duplicated across many hosts, documents will be preserved even if a single server is compromised or ceases to host the content. Furthermore, documents' integrity is periodically verified across hosts in order to ensure that all copies of the document are equivalent to the originally-uploaded document. Subsequently, Project Orwell provides a mechanism for users to preserve documents while ensuring readers that the content is at all times faithful to the originally uploaded document.
 
+For more installation, read the Orwell white paper: http://tommymacwilliam.com/orwell.pdf
+
 ## Dependencies 
 
 * PHP 5.3+
